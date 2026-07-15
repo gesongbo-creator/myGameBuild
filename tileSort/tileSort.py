@@ -1,10 +1,10 @@
 import copy
 import random
 import numpy as np
-colorNum = 7
-tileNum = 6
-levelNum = 1
-levelType = 0
+colorNum = 5
+tileNum = 5
+levelNum = 500
+levelType = 1
 
 mry = 0
 
@@ -15,6 +15,9 @@ def exchangeTile(level,position,tile):
     return newtile,level
 
 for i in range(levelNum):
+    colorNum = random.randint(5, 7)
+    tileNum = random.randint(5, 7)
+    levelType = random.randint(0, 2)
     hand = 0
     level =[[0 for _ in range(tileNum)] for _ in range(colorNum)]
     for i in range(0,colorNum,1):
@@ -29,7 +32,7 @@ for i in range(levelNum):
             hand = movedata[0]
             level =movedata[1]
 
-        print(hand,",",move+15,",",level)
+        print(hand,"|",move+15,"|",level)
     if levelType == 1:
         for i in range(0,move,1):
             movedata = exchangeTile(level,random.randint(0,colorNum-1),hand)
@@ -38,22 +41,23 @@ for i in range(levelNum):
 
         questionMark = [[0 for _ in range(3)] for _ in range(random.randint(colorNum-2,colorNum+2))]
         for data in questionMark:
-            data[1]=random.randint(0,colorNum)
-            data[2] = random.randint(0, tileNum)
+            data[1]=random.randint(0,colorNum-1)
+            data[2] = random.randint(0, tileNum -2 )
         # print(questionMark)
         # print(np.unique(questionMark, axis=0).tolist())
         # print("--------------------")
         if len(np.unique(questionMark, axis=0).tolist()) <2:
             mry = mry+1
-            print(mry/levelNum)
+            # print(mry/levelNum)
         while len(np.unique(questionMark, axis=0).tolist())< colorNum-2:
             # print("触发条件，开始处理")
-            data1 = random.randint(0, colorNum)
-            data2 = random.randint(0, tileNum)
+
+            data1 = random.randint(0, colorNum-1)
+            data2 = random.randint(0, tileNum-2)
             questionMark.append([0,data1,data2])
             questionMark = np.unique(questionMark, axis=0).tolist()
 
-        print(hand,",",move+20,",",level,",",questionMark)
+        print(hand,"|",move+20,"|",level,"|",questionMark)
     if levelType == 2:
         for i in range(0,move,1):
             movedata = exchangeTile(level,random.randint(0,colorNum-1),hand)
@@ -76,19 +80,13 @@ for i in range(levelNum):
         colorNumTure = 0
         for i in range(0,colorNum,1):
             # print(i,noIce.count(i))
+            # print(tileNum)
             if noIce.count(i) == tileNum:
                 colorNumTure=colorNumTure+1
         # print(colorNumTure)
-        iceNum = random.randint(1, colorNumTure)
-        icedata = []
-        icedata.append([1,ice,iceNum])
-        print(hand, ",", move + iceNum*5, ",", level, ",", icedata)
-
-
-
-
-
-
-
-
+        if colorNumTure!=0:
+            iceNum = random.randint(1, colorNumTure)
+            icedata = []
+            icedata.append([1,ice,iceNum])
+            print(hand, "|", move + iceNum*5, "|", level, "|", icedata)
 
