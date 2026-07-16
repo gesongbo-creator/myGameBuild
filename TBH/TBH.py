@@ -13,6 +13,8 @@
 
 import os
 import time
+from symtable import Function
+
 import cv2
 import numpy as np
 import pyautogui
@@ -20,7 +22,7 @@ from PIL import ImageGrab
 import keyboard  # 用于监听全局热键
 
 # ================== 可自定义的全局参数 ==================
-CHECK_INTERVAL = 60          # 检测间隔（秒）
+CHECK_INTERVAL = 600          # 检测间隔（秒）
 MATCH_THRESHOLD = 0.8        # 图像匹配阈值，范围 0~1，越高要求越严格
 
 # 模板图片文件名（务必与脚本放在同一目录）
@@ -28,6 +30,17 @@ AUTOFILL_IMG = "Auto-fill.jpg"
 COMBINE_IMG = "Combine.jpg"
 NOTHING_IMG = "NothingToCombine.jpg"
 COMBINE_RE_IMG = "combine_re.jpg"
+ACCESSORIES_IMG = "Accessories.jpg"
+EQUIPMENT_IMG = "Equipment.jpg"
+MATERIALS_IMG = "Materials.jpg"
+MORE_IMG = "More.jpg"
+MAKE_IMG = "make.jpg"
+MAKING_IMG = "making.jpg"
+TAP_IMG = "tap.jpg"
+FUNCTIONS_IMG = "Function.jpg"
+RING_IMG = "Ring.jpg"
+MAGIC_IMG = "magic.jpg"
+
 
 # =====================================================
 
@@ -133,10 +146,21 @@ def move_and_click(center, desc=""):
     print(f"  -> 点击 {desc} 位置：{center}")
 
 def combineEquipment():
+    # 处理装备的逻辑
+    tpl_more = load_image(MORE_IMG)
     tpl_auto = load_image(AUTOFILL_IMG)
     tpl_combine = load_image(COMBINE_IMG)
-    tpl_nothing = load_image(NOTHING_IMG)
+    tpl_Equipment = load_image(EQUIPMENT_IMG)
     tpl_combine_re = load_image(COMBINE_RE_IMG)
+
+    pyautogui.press('space')
+    val, _, center_more = find_template(tpl_more)
+    if center_more is not None:
+        move_and_click(center_more, "tpl_more")
+
+    val, _, center_Equipment = find_template(tpl_Equipment)
+    if center_Equipment is not None:
+        move_and_click(center_Equipment, "tpl_Equipment")
 
     val, _, center_auto = find_template(tpl_auto)
     if center_auto is not None:
@@ -149,6 +173,93 @@ def combineEquipment():
     val, _, center_combine_re = find_template(tpl_combine_re)
     if center_combine_re is not None:
         move_and_click(center_combine_re, "combine_re")
+
+def combineMaterials():
+    # 处理材料的逻辑
+    tpl_more = load_image(MORE_IMG)
+    tpl_auto = load_image(AUTOFILL_IMG)
+    tpl_combine = load_image(COMBINE_IMG)
+    tpl_Materials = load_image(MATERIALS_IMG)
+    tpl_combine_re = load_image(COMBINE_RE_IMG)
+
+    pyautogui.press('space')
+    val, _, center_more = find_template(tpl_more)
+    if center_more is not None:
+        move_and_click(center_more, "tpl_more")
+
+    val, _, center_Materials = find_template(tpl_Materials)
+    if center_Materials is not None:
+        move_and_click(center_Materials, "tpl_Materials")
+
+    val, _, center_auto = find_template(tpl_auto)
+    if center_auto is not None:
+        move_and_click(center_auto, "auto")
+
+    val, _, center_combine = find_template(tpl_combine)
+    if center_combine is not None:
+        move_and_click(center_combine, "combine")
+
+    val, _, center_combine_re = find_template(tpl_combine_re)
+    if center_combine_re is not None:
+        move_and_click(center_combine_re, "combine_re")
+
+def Level80Ring():
+    tpl_make = load_image(MAKE_IMG)
+    tpl_making = load_image(MAKING_IMG)
+    tpl_tap = load_image(TAP_IMG)
+    tpl_function = load_image(FUNCTIONS_IMG)
+    tpl_ring = load_image(RING_IMG)
+    tpl_magic = load_image(MAGIC_IMG)
+    tpl_auto = load_image(AUTOFILL_IMG)
+
+    val, _, center_tap = find_template(tpl_tap)
+    if center_tap is not None:
+        move_and_click(center_tap, "center_tap")
+    pyautogui.press('space')
+    val, _, center_magic = find_template(tpl_magic)
+    if center_magic is not None:
+        move_and_click(center_magic, "center_magic")
+
+    val, _, center_function = find_template(tpl_function)
+    if center_function is not None:
+        print("1111")
+        move_and_click(center_magic, "center_function")
+
+    val, _, center_make = find_template(tpl_make)
+    if center_make is not None:
+        move_and_click(center_magic, "center_make")
+
+    val, _, center_ring = find_template(tpl_ring)
+    if center_ring is not None:
+        move_and_click(center_magic, "center_ring")
+
+    val, _, center_auto = find_template(tpl_auto)
+    if center_auto is not None:
+        move_and_click(center_magic, "center_auto")
+
+    val, _, center_makeing = find_template(tpl_making)
+    if center_makeing is not None:
+        move_and_click(center_magic, "center_makeing")
+
+
+def openMagic():
+    tpl_magic = load_image(MAGIC_IMG)
+    tpl_tap = load_image(TAP_IMG)
+    val, _, center_tap = find_template(tpl_tap)
+    if center_tap is not None:
+        move_and_click(center_tap, "center_tap")
+    pyautogui.press('space')
+    val, _, center_magic = find_template(tpl_magic)
+    if center_magic is not None:
+        move_and_click(center_magic, "center_magic")
+
+def closeMagic():
+    tpl_magic = load_image(MAGIC_IMG)
+    tpl_tap = load_image(TAP_IMG)
+    val, _, center_tap = find_template(tpl_tap)
+    if center_tap is not None:
+        move_and_click(center_tap, "center_tap")
+
 
 def main():
     """
@@ -164,8 +275,13 @@ def main():
 
     # ---- 主循环：只要退出标志未置位，就持续运行 ----
     while not EXIT_FLAG:
-
+        openMagic()
         combineEquipment()
+        time.sleep(2)
+        combineMaterials()
+        time.sleep(2)
+        closeMagic()
+        # Level80Ring()
         # 无论是否匹配成功，都将鼠标移回整个虚拟桌面的中心
         screen = capture_full_screen()
         h, w = screen.shape[:2]           # 虚拟桌面的高度和宽度
